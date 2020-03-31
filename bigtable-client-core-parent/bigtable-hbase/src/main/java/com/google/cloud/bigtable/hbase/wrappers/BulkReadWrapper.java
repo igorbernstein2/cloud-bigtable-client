@@ -29,7 +29,7 @@ import org.apache.hadoop.hbase.client.Result;
  * <p>For internal use only - public for technical reasons.
  */
 @InternalApi("For internal usage only")
-public interface BulkReadWrapper extends AutoCloseable {
+public interface BulkReadWrapper {
 
   /**
    * Adds a {@code rowKey} to a batch read row request with an optional {@link Filters.Filter}. The
@@ -42,7 +42,4 @@ public interface BulkReadWrapper extends AutoCloseable {
    * complete.
    */
   void flush();
-
-  /** Closes the batch and prevents new keys addition. */
-  void close() throws IOException;
 }
