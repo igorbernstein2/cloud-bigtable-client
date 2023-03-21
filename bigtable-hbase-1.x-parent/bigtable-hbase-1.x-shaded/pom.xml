@@ -93,26 +93,8 @@ limitations under the License.
       <groupId>${project.groupId}</groupId>
       <artifactId>bigtable-hbase-1.x</artifactId>
       <version>2.7.3-SNAPSHOT</version> <!-- {x-version-update:bigtable-client-parent:current} -->
-      <exclusions>
-        <!-- api-common recently declared dependency on autovalue during migration to gradle. We don't
-            have a use of it so we're excluding it from the shaded jar. -->
-        <exclusion>
-          <groupId>com.google.auto.value</groupId>
-          <artifactId>auto-value</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
-    <dependency>
-      <groupId>com.google.cloud.bigtable</groupId>
-      <artifactId>bigtable-metrics-api</artifactId>
-      <version>${bigtable-client-core.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.api</groupId>
-          <artifactId>api-common</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+
     <!-- Since opencensus-api is a transitive dep, we have to shade its impl as well.
     Otherwise the -api will be permanently severed from the impl and exporters -->
     <dependency>
@@ -126,26 +108,10 @@ limitations under the License.
     <dependency>
       <groupId>io.opencensus</groupId>
       <artifactId>opencensus-exporter-stats-stackdriver</artifactId>
-      <exclusions>
-        <!-- api-common recently declared dependency on autovalue during migration to gradle. We don't
-            have a use of it so we're excluding it from the shaded jar. -->
-        <exclusion>
-          <groupId>com.google.auto.value</groupId>
-          <artifactId>auto-value</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>io.opencensus</groupId>
       <artifactId>opencensus-exporter-trace-stackdriver</artifactId>
-      <exclusions>
-        <!-- api-common recently declared dependency on autovalue during migration to gradle. We don't
-            have a use of it so we're excluding it from the shaded jar. -->
-        <exclusion>
-          <groupId>com.google.auto.value</groupId>
-          <artifactId>auto-value</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>io.opencensus</groupId>
@@ -407,6 +373,10 @@ limitations under the License.
                   <pattern>net.bytebuddy</pattern>
                   <shadedPattern>com.google.bigtable.repackaged.net.bytebuddy</shadedPattern>
                 </relocation>
+                <relocation>
+                  <pattern>autovalue</pattern>
+                  <shadedPattern>com.google.bigtable.repackaged.autovalue</shadedPattern>
+                </relocation>
               </relocations>
             </configuration>
           </execution>
@@ -445,16 +415,6 @@ limitations under the License.
         </executions>
       </plugin>
 
-      <!-- skip for shaded jar-->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <configuration>
-          <ignoredDependencies>
-            <dependency>*</dependency>
-          </ignoredDependencies>
-        </configuration>
-      </plugin>
       <!-- skip for shaded jar-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
